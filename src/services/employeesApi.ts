@@ -1,5 +1,4 @@
 import { api } from "../services/api";
-import type { Department } from "../types/departmentTypes";
 import type {
   ApiResponse,
   Employee,
