@@ -5,9 +5,9 @@ import type {
   TimesheetEntry,
   CreateTimesheetDto,
   Project,
-  Task,
   ApiResponse,
 } from "../types/timesheet";
+import type { Task } from "../types/taskTypes";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:3000/api";
