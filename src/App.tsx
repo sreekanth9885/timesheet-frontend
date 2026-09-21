@@ -10,6 +10,7 @@ import ProjectsPage from "./pages/ProjectsPage";
 import EmployeesPage from "./pages/EmployeesPage";
 import DepartmentsPage from "./pages/DepartmentsPage";
 import ApprovalsPage from "./pages/ApprovalsPage";
+import DashboardPage from "./pages/DashboardPage";
 function App() {
   return (
     <BrowserRouter>
@@ -18,10 +19,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<AppLayout />}>
             <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            <Route
-              path="/dashboard"
-              element={<div>Dashboard Placeholder</div>}
-            />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/employees" element={<EmployeesPage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/projects" element={<ProjectsPage />} />
