@@ -1,0 +1,13 @@
+services:
+  frontend:
+    build: .
+    container_name: timesheet-frontend
+    restart: unless-stopped
+
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.timesheet-frontend.rule=Host(`timesheet.dinnusmart.com`)"
+      - "traefik.http.routers.timesheet-frontend.entrypoints=websecure"
+      - "traefik.http.routers.timesheet-frontend.tls=true"
+      - "traefik.http.routers.timesheet-frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.services.timesheet-frontend.loadbalancer.server.port=80"
