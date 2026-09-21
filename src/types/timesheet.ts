@@ -20,12 +20,6 @@ export interface Project {
   name: string;
   project_code: string;
 }
-
-export interface Task {
-  id: number;
-  name: string;
-}
-
 export interface CreateTimesheetDto {
   date: string;
   project_id: number;

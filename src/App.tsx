@@ -5,6 +5,8 @@ import AppLayout from "./layouts/AppLayout";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import Timesheets from "./pages/Timesheets";
+import TasksPage from "./pages/TasksPage";
+import ProjectsPage from "./pages/ProjectsPage";
 function App() {
   return (
     <BrowserRouter>
@@ -25,8 +27,8 @@ function App() {
               path="/departments"
               element={<div>Departments Placeholder</div>}
             />
-            <Route path="/projects" element={<div>Projects Placeholder</div>} />
-            <Route path="/tasks" element={<div>Tasks Placeholder</div>} />
+            <Route path="/projects" element={<ProjectsPage />} />
+            <Route path="/tasks" element={<TasksPage />} />
             <Route path="/timesheets" element={<Timesheets />} />
             <Route
               path="/approvals"
