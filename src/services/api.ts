@@ -22,7 +22,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Tasks", "Projects"],
+  tagTypes: ["Tasks", "Projects", "Employees", "Departments", "Approvals"],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
