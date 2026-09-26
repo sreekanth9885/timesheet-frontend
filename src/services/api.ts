@@ -30,6 +30,10 @@ export const api = createApi({
     "Approvals",
     "Dashboard",
     "Timesheets",
+    "Overtime",
+    "Reports",
+    "Settings",
+    "AuditLogs",
   ],
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({

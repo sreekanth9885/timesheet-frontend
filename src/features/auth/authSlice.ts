@@ -1,13 +1,13 @@
 // src/features/auth/authSlice.ts
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "../../types";
+import type { RootState } from "../../store";
 
 interface AuthState {
   user: User | null;
   token: string | null;
 }
 
-// Load initial state from localStorage to persist sessions
 const initialState: AuthState = {
   user: JSON.parse(localStorage.getItem("user") || "null"),
   token: localStorage.getItem("token"),
@@ -37,3 +37,17 @@ const authSlice = createSlice({
 
 export const { setCredentials, logOut } = authSlice.actions;
 export default authSlice.reducer;
+
+// ─── Selectors ──────────────────────────────────────────────────────────────
+export const selectAuth = (state: RootState) => state.auth;
+export const selectUser = (state: RootState) => state.auth.user;
+export const selectToken = (state: RootState) => state.auth.token;
+export const selectIsAuthenticated = (state: RootState) =>
+  Boolean(state.auth.token);
+
+/**
+ * Admin role check. Adjust the literal if your backend uses a different
+ * value (e.g. "ADMIN", "hr", or numeric role IDs). See notes below.
+ */
+export const selectIsAdmin = (state: RootState) =>
+  state.auth.user?.role === "admin";
