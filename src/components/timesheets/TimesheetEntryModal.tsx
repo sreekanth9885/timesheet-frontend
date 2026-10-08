@@ -6,10 +6,10 @@ import Modal from "../Modal";
 import type { TimesheetEntry, CreateTimesheetDto } from "../../types/timesheet";
 import {
   useCreateTimesheetMutation,
-  useGetProjectsQuery,
   useGetTasksQuery,
   useUpdateTimesheetMutation,
 } from "../../services/timesheetApi";
+import { useGetProjectsQuery } from "../../services/projectsApi";
 
 interface TimesheetEntryModalProps {
   isOpen: boolean;

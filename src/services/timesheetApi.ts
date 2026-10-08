@@ -4,7 +4,6 @@ import type { RootState } from "../store";
 import type {
   TimesheetEntry,
   CreateTimesheetDto,
-  Project,
   ApiResponse,
 } from "../types/timesheet";
 import type { Task } from "../types/taskTypes";
@@ -29,11 +28,6 @@ export const timesheetApi = createApi({
   tagTypes: ["Timesheets", "Projects", "Tasks"],
   endpoints: (builder) => ({
     // ---- Metadata ----
-    getProjects: builder.query<Project[], void>({
-      query: () => "/projects",
-      transformResponse: (res: ApiResponse<Project[]>) => res.data || [],
-      providesTags: ["Projects"],
-    }),
     getTasks: builder.query<Task[], void>({
       query: () => "/tasks",
       transformResponse: (res: ApiResponse<Task[]>) => res.data || [],
@@ -90,7 +84,6 @@ export const timesheetApi = createApi({
 });
 
 export const {
-  useGetProjectsQuery,
   useGetTasksQuery,
   useGetMyTodayTimesheetsQuery,
   useGetMyWeekTimesheetsQuery,
