@@ -215,7 +215,21 @@ export const api = createApi({
 
   baseQuery: baseQueryWithProjectDecryption,
 
-  tagTypes: ["Auth", "Project"],
+  tagTypes: [
+    "Auth",
+    "Project",
+    "Projects",
+    "Approvals",
+    "AuditLogs",
+    "Dashboard",
+    "Timesheets",
+    "Departments",
+    "Employees",
+    "Overtime",
+    "Reports",
+    "Settings",
+    "Tasks",
+  ],
 
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
