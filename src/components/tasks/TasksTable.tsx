@@ -58,8 +58,9 @@ export function TasksTable({
               <tr key={task.id} className="hover:bg-gray-50">
                 <td className="px-4 py-3 max-w-[280px]">
                   <div className="font-semibold text-gray-800 flex items-center gap-2">
-                    {task.name}
-                    {task.is_employee_created && (
+                    <span>{task.name}</span>
+
+                    {Number(task.is_employee_created) === 1 && (
                       <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-100 text-blue-700">
                         Self-Created
                       </span>

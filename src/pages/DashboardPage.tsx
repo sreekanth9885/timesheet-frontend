@@ -89,7 +89,7 @@ export default function DashboardPage() {
           </p>
         </div>
 
-        <Link
+        {/* <Link
           to="/timesheets"
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700"
         >
@@ -104,7 +104,7 @@ export default function DashboardPage() {
             <path d="M12 4v16m8-8H4" />
           </svg>
           Log Time
-        </Link>
+        </Link> */}
       </div>
 
       {/* Stats */}
