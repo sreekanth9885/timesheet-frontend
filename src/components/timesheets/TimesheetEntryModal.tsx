@@ -33,7 +33,7 @@ const TimesheetEntryModal = ({
     useCreateTimesheetMutation();
   const [updateTimesheet, { isLoading: isUpdating }] =
     useUpdateTimesheetMutation();
-
+  const [breakMinutesInput, setBreakMinutesInput] = useState("30");
   const [form, setForm] = useState<CreateTimesheetDto>({
     date: getTodayISO(),
     project_id: 0,
@@ -79,6 +79,12 @@ const TimesheetEntryModal = ({
   ) => setForm((prev) => ({ ...prev, [key]: value }));
 
   const handleSubmit = async () => {
+    const breakMinutes = Number(breakMinutesInput);
+
+    if (breakMinutesInput === "" || !Number.isInteger(breakMinutes)) {
+      toast.error("Please enter valid break minutes");
+      return;
+    }
     if (
       !form.project_id ||
       !form.start_time ||
@@ -91,6 +97,7 @@ const TimesheetEntryModal = ({
 
     const payload: CreateTimesheetDto = {
       ...form,
+      break_minutes: breakMinutes,
       task_id: form.task_id || null,
       description: form.description.trim(),
       work_summary: form.work_summary.trim() || form.description.trim(),
@@ -229,10 +236,21 @@ const TimesheetEntryModal = ({
             <label className={labelClass}>Break (Mins)</label>
             <input
               type="number"
-              value={form.break_minutes}
-              onChange={(e) =>
-                update("break_minutes", parseInt(e.target.value) || 0)
-              }
+              min="0"
+              step="1"
+              value={breakMinutesInput}
+              onChange={(e) => {
+                const value = e.target.value;
+
+                if (value === "" || /^\d+$/.test(value)) {
+                  setBreakMinutesInput(value);
+                }
+              }}
+              onBlur={() => {
+                const value = Math.max(0, Number(breakMinutesInput) || 0);
+                setBreakMinutesInput(String(value));
+                update("break_minutes", value);
+              }}
               className={inputClass}
             />
           </div>

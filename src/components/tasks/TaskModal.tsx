@@ -182,11 +182,23 @@ export function TaskModal({ open, task, projects, employees, onClose }: Props) {
               </label>
               <input
                 type="number"
-                value={form.estimated_hours}
-                onChange={(e) =>
-                  update("estimated_hours", Number(e.target.value) || 0)
-                }
+                min="0"
+                step="0.5"
+                value={form.estimated_hours ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+
+                  if (value === "") {
+                    update("estimated_hours", "" as unknown as number);
+                    return;
+                  }
+
+                  if (Number(value) >= 0) {
+                    update("estimated_hours", Number(value));
+                  }
+                }}
                 className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
+                placeholder="Enter estimated hours"
               />
             </div>
 
