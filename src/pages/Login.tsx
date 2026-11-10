@@ -1,4 +1,4 @@
-// src/pages/Login.tsx
+
 import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -7,8 +7,9 @@ import { useLoginMutation } from "../services/api";
 import { setCredentials } from "../features/auth/authSlice";
 
 const Login = () => {
-  const [email, setEmail] = useState("superadmin@example.com");
-  const [password, setPassword] = useState("password123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -16,6 +17,7 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
     try {
       const response = await login({ email, password }).unwrap();
 
@@ -25,7 +27,6 @@ const Login = () => {
 
       const { token, user } = response.data;
 
-      // Normalize user object
       const normalizedUser = {
         id: user.id,
         employee_id: user.employee_id,
@@ -51,10 +52,10 @@ const Login = () => {
       toast.error(err.message || "Invalid email or password");
     }
   };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div className="w-full max-w-md bg-white rounded-xl shadow-lg p-8 transition-all duration-300">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4 text-blue-600">
             <svg
@@ -68,24 +69,26 @@ const Login = () => {
               <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
           </div>
+
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
             Timesheet System
           </h1>
+
           <p className="text-sm text-gray-500">
             Sign in with your enterprise credentials
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
             </label>
+
             <input
               type="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-              placeholder="admin1@example.com"
+              placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -93,33 +96,20 @@ const Login = () => {
             />
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
+
             <input
               type="password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
-              placeholder="••••••••"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
             />
-          </div>
-
-          <div className="flex justify-between items-center mb-6">
-            <label className="flex items-center gap-2 text-sm text-gray-500 cursor-pointer">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              Remember me
-            </label>
-            <span className="text-sm text-blue-600 font-medium">
-              Default password: password123
-            </span>
           </div>
 
           <button
