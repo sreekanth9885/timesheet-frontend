@@ -128,7 +128,7 @@ const Header = ({ onOpenMobileSidebar }: HeaderProps) => {
             "
           >
             <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm shrink-0">
-              {user.name.charAt(0).toUpperCase()}
+              {user.name?.charAt(0).toUpperCase()}
             </div>
 
             <span className="text-sm font-medium text-gray-700 hidden sm:block max-w-[150px] truncate">
@@ -161,9 +161,7 @@ const Header = ({ onOpenMobileSidebar }: HeaderProps) => {
                     {user.name}
                   </p>
 
-                  <p className="text-xs text-gray-500 truncate">
-                    {user.email}
-                  </p>
+                  <p className="text-xs text-gray-500 truncate">{user.email}</p>
                 </div>
 
                 <button
@@ -188,7 +186,6 @@ const Header = ({ onOpenMobileSidebar }: HeaderProps) => {
                   >
                     <path d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
-
                   Logout
                 </button>
               </div>
