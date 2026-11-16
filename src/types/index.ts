@@ -1,16 +1,16 @@
-// src/types/index.ts
-export interface User {
+export interface User extends OrganizationInfo {
   id: number;
-  employee_id?: string;
-  name: string;
-  first_name?: string;
-  last_name?: string;
+  employee_id: string;
+  name?: string;
+  first_name: string;
+  last_name: string;
   email: string;
-  mobile?: string;
-  department_id?: number;
-  designation?: string;
+  mobile?: string | null;
+  department_id?: number | null;
+  designation?: string | null;
   role_id: number;
-  role: "admin" | "employee";
+  role: "admin" | "employee" | "super_admin";
+  status?: string;
 }
 
 export interface LoginRequest {
@@ -18,11 +18,42 @@ export interface LoginRequest {
   password: string;
 }
 
+export interface OrganizationInfo {
+  organization_id: number;
+  organization_name: string;
+  organization_code: string;
+}
+
 export interface LoginResponse {
   success: boolean;
   message: string;
-  data: {
-    token: string;
-    user: User;
-  };
+  data: { token: string; user: User };
+}
+
+export interface RegisterOrganizationRequest {
+  company_name: string;
+  contact_person: string;
+  email: string;
+  mobile?: string;
+  password: string;
+}
+
+export interface RegisterOrganizationResponse {
+  success: boolean;
+  message: string;
+  data: { organization_id: number; admin_user_id: number; status: string };
+}
+
+export interface PendingOrganization {
+  id: number;
+  name: string;
+  contact_person: string;
+  email: string;
+  phone?: string | null;
+  status: string;
+  created_at: string;
+  admin_user_id?: number;
+  admin_first_name?: string;
+  admin_last_name?: string;
+  admin_email?: string;
 }

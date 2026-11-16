@@ -8,7 +8,14 @@ import {
 } from "@reduxjs/toolkit/query/react";
 
 import type { RootState } from "../store";
-import type { LoginRequest, LoginResponse, User } from "../types";
+import type {
+  LoginRequest,
+  LoginResponse,
+  PendingOrganization,
+  RegisterOrganizationRequest,
+  RegisterOrganizationResponse,
+  User,
+} from "../types";
 
 import {
   getClientPublicKey,
@@ -229,6 +236,7 @@ export const api = createApi({
     "Reports",
     "Settings",
     "Tasks",
+    "Organizations",
   ],
 
   endpoints: (builder) => ({
@@ -256,7 +264,76 @@ export const api = createApi({
       }),
       providesTags: ["Auth"],
     }),
+    registerOrganization: builder.mutation<
+      RegisterOrganizationResponse,
+      RegisterOrganizationRequest
+    >({
+      query: (body) => ({
+        url: "/auth/register-organization",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    listPendingOrganizations: builder.query<PendingOrganization[], void>({
+      query: () => "/super-admin/organizations/pending",
+      // ✅ Unwrap `{ success, data: [...] }` → `[...]`
+      transformResponse: (resp: {
+        success: boolean;
+        data: PendingOrganization[];
+      }) => resp.data,
+      providesTags: ["Organizations"],
+    }),
+
+    listAllOrganizations: builder.query<
+      PendingOrganization[],
+      string | undefined
+    >({
+      query: (status) => ({
+        url: "/super-admin/organizations",
+        params: status ? { status } : undefined,
+      }),
+      transformResponse: (resp: {
+        success: boolean;
+        data: PendingOrganization[];
+      }) => resp.data,
+      providesTags: ["Organizations"],
+    }),
+
+    approveOrganization: builder.mutation<
+      {
+        success: boolean;
+        data: { organization_id: number; organization_code: string };
+      },
+      number
+    >({
+      query: (id) => ({
+        url: `/super-admin/organizations/${id}/approve`,
+        method: "POST",
+      }),
+      invalidatesTags: ["Organizations"],
+    }),
+
+    rejectOrganization: builder.mutation<
+      { success: boolean },
+      { id: number; reason?: string }
+    >({
+      query: ({ id, reason }) => ({
+        url: `/super-admin/organizations/${id}/reject`,
+        method: "POST",
+        body: { reason },
+      }),
+      invalidatesTags: ["Organizations"],
+    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation, useGetMeQuery } = api;
+export const {
+  useLoginMutation,
+  useLogoutMutation,
+  useGetMeQuery,
+  useRegisterOrganizationMutation,
+  useListPendingOrganizationsQuery,
+  useApproveOrganizationMutation,
+  useRejectOrganizationMutation,
+} = api;
