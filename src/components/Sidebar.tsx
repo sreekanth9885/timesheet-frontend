@@ -18,7 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  Shield, // ← NEW icon for Organization Approvals
+  Shield,
 } from "lucide-react";
 
 interface NavItem {
@@ -46,6 +46,15 @@ const Sidebar = ({
 
   if (!user) return null;
 
+  /* ── Branding ─────────────────────────────────────────── */
+  const isSuperAdmin = user.role === "super_admin";
+  const brandName = isSuperAdmin
+    ? "TimePro"
+    : user.organization_name || "TimePro";
+  const brandInitial = isSuperAdmin
+    ? null
+    : (user.organization_name || "?").trim().charAt(0).toUpperCase();
+
   const links: NavItem[] = [
     // ─── Super Admin only ──────────────────────────────────────
     {
@@ -56,7 +65,7 @@ const Sidebar = ({
       icon: <Shield className="w-5 h-5 shrink-0" />,
     },
 
-    // ─── Shared items — super_admin added to each roles array ──
+    // ─── Shared items ──────────────────────────────────────────
     {
       id: "dashboard",
       path: "/dashboard",
@@ -138,6 +147,18 @@ const Sidebar = ({
 
   const visibleLinks = links.filter((link) => link.roles.includes(user.role));
 
+  /* Reusable brand mark — clock for super admin, initial for orgs */
+  const BrandMark = () =>
+    brandInitial ? (
+      <div className="w-9 h-9 flex items-center justify-center bg-blue-600 text-white rounded-lg font-bold text-sm shrink-0">
+        {brandInitial}
+      </div>
+    ) : (
+      <div className="p-2 bg-blue-600 text-white rounded-lg shrink-0">
+        <Clock className="w-5 h-5" />
+      </div>
+    );
+
   return (
     <>
       {/* ================================
@@ -200,11 +221,12 @@ const Sidebar = ({
             ) : (
               <div className="w-full h-full flex items-center justify-between px-5">
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="p-2 bg-blue-600 text-white rounded-lg shrink-0">
-                    <Clock className="w-5 h-5" />
-                  </div>
-                  <span className="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">
-                    TimePro
+                  <BrandMark />
+                  <span
+                    className="text-xl font-bold text-gray-800 tracking-tight truncate"
+                    title={brandName}
+                  >
+                    {brandName}
                   </span>
                 </div>
                 <button
@@ -223,11 +245,12 @@ const Sidebar = ({
           {/* MOBILE HEADER */}
           <div className="flex lg:hidden h-full w-full items-center justify-between px-5">
             <div className="flex items-center gap-3 min-w-0">
-              <div className="p-2 bg-blue-600 text-white rounded-lg shrink-0">
-                <Clock className="w-5 h-5" />
-              </div>
-              <span className="text-xl font-bold text-gray-800 tracking-tight whitespace-nowrap">
-                TimePro
+              <BrandMark />
+              <span
+                className="text-xl font-bold text-gray-800 tracking-tight truncate"
+                title={brandName}
+              >
+                {brandName}
               </span>
             </div>
             <button

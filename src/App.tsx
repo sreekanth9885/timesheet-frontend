@@ -22,6 +22,7 @@ import AuditLogsPage from "./pages/AuditLogsPage";
 import OrganizationApprovals from "./pages/superadmin/OrganizationApprovals";
 
 import { selectUser } from "./features/auth/authSlice";
+import { useDocumentTitle } from "./hooks/useDocumentTitle";
 
 function RootRedirect() {
   const user = useSelector(selectUser);
@@ -38,6 +39,7 @@ function RootRedirect() {
 }
 
 function App() {
+  useDocumentTitle();
   return (
     <BrowserRouter>
       <Routes>

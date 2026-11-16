@@ -332,6 +332,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useGetMeQuery,
+  useListAllOrganizationsQuery,
   useRegisterOrganizationMutation,
   useListPendingOrganizationsQuery,
   useApproveOrganizationMutation,

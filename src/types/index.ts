@@ -44,14 +44,27 @@ export interface RegisterOrganizationResponse {
   data: { organization_id: number; admin_user_id: number; status: string };
 }
 
+export type OrganizationStatus =
+  | "pending"
+  | "active"
+  | "rejected"
+  | "suspended"
+  | "inactive";
+
 export interface PendingOrganization {
   id: number;
   name: string;
   contact_person: string;
   email: string;
   phone?: string | null;
-  status: string;
+  status: OrganizationStatus; // ← narrowed from `string`
   created_at: string;
+
+  // Present in GET /super-admin/organizations (all) but not /pending:
+  code?: string;
+  rejection_reason?: string | null;
+
+  // Present in GET /super-admin/organizations/pending only:
   admin_user_id?: number;
   admin_first_name?: string;
   admin_last_name?: string;
