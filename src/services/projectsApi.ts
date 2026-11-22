@@ -12,12 +12,12 @@ export const projectsApi = api.injectEndpoints({
       query: () => "/projects",
       transformResponse: (res: ApiResponse<Project[]>) =>
         res?.success && res.data ? res.data : [],
-      providesTags: ["Projects"],
+      providesTags: ["Projects", "Dashboard"],
     }),
 
     createProject: builder.mutation<Project, ProjectFormData>({
       query: (body) => ({ url: "/projects", method: "POST", body }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Projects", "Dashboard"],
     }),
 
     updateProject: builder.mutation<
@@ -29,12 +29,12 @@ export const projectsApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Projects", "Dashboard"],
     }),
 
     deleteProject: builder.mutation<void, number>({
       query: (id) => ({ url: `/projects/${id}`, method: "DELETE" }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: ["Projects", "Dashboard"],
     }),
 
     getProjectEmployees: builder.query<ProjectEmployee[], number>({
@@ -55,6 +55,9 @@ export const projectsApi = api.injectEndpoints({
       }),
       invalidatesTags: (_r, _e, { projectId }) => [
         { type: "Projects", id: projectId },
+        "Projects",
+        "Employees", // ← allocation changes employee utilisation
+        "Dashboard",
       ],
     }),
 
@@ -68,6 +71,9 @@ export const projectsApi = api.injectEndpoints({
       }),
       invalidatesTags: (_r, _e, { projectId }) => [
         { type: "Projects", id: projectId },
+        "Projects",
+        "Employees", // ← allocation changes employee utilisation
+        "Dashboard",
       ],
     }),
   }),

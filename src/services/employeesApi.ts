@@ -16,7 +16,7 @@ export const employeesApi = api.injectEndpoints({
         }),
         transformResponse: (res: ApiResponse<Employee[]>) =>
           res?.success && res.data ? res.data : [],
-        providesTags: ["Employees"],
+        providesTags: ["Employees", "Dashboard"],
       },
     ),
 
@@ -29,7 +29,7 @@ export const employeesApi = api.injectEndpoints({
 
     createEmployee: builder.mutation<Employee, EmployeeFormData>({
       query: (body) => ({ url: "/employees", method: "POST", body }),
-      invalidatesTags: ["Employees"],
+      invalidatesTags: ["Employees", "Dashboard"],
     }),
 
     updateEmployee: builder.mutation<
@@ -41,12 +41,12 @@ export const employeesApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Employees"],
+      invalidatesTags: ["Employees", "Dashboard"],
     }),
 
     terminateEmployee: builder.mutation<void, number>({
       query: (id) => ({ url: `/employees/${id}`, method: "DELETE" }),
-      invalidatesTags: ["Employees"],
+      invalidatesTags: ["Employees", "Dashboard"],
     }),
   }),
 });

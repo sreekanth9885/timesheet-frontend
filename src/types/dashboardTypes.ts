@@ -34,6 +34,7 @@ export interface DashboardStat {
   value: string;
   icon: ReactNode;
   accent: StatAccent;
+  to?: string;
 }
 
 export interface ApiResponse<T> {

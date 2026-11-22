@@ -52,12 +52,29 @@ export default function DashboardPage() {
     "info",
   ];
 
+  // ── Route targets per role, in the same order as `labels` ────────────────
+  const STAT_ROUTES: Record<"admin" | "employee", string[]> = {
+    admin: [
+      "/employees", // Active Employees
+      "/projects", // Active Projects
+      "/approvals", // Pending Approvals
+      "/timesheets", // Today's Total Hours
+    ],
+    employee: [
+      "/timesheets", // Hours This Week
+      "/timesheets", // Today's Logged Hours
+      "/tasks", // Assigned Active Tasks
+      "/timesheets", // Hours This Month
+    ],
+  };
+
   const statCards: DashboardStat[] = values.map((value, i) => ({
     key: labels[i],
     label: labels[i],
     value,
     icon: icons[i],
     accent: accents[i],
+    to: STAT_ROUTES[role][i],
   }));
 
   // ── 2. Projects pie chart buckets (same rules as the vanilla version) ────

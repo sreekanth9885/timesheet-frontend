@@ -22,7 +22,7 @@ export const approvalsApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Approvals"],
+      invalidatesTags: ["Approvals", "Dashboard", "Timesheets", "Tasks"],
     }),
 
     rejectRequest: builder.mutation<void, ApprovalDecision>({
@@ -31,7 +31,7 @@ export const approvalsApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Approvals"],
+      invalidatesTags: ["Approvals", "Dashboard", "Timesheets", "Tasks"],
     }),
   }),
 });
