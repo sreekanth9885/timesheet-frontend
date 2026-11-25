@@ -40,8 +40,20 @@ export const timesheetApi = createApi({
       transformResponse: (res: ApiResponse<TimesheetEntry[]>) => res.data || [],
       providesTags: ["Timesheets"],
     }),
-    getMyWeekTimesheets: builder.query<TimesheetEntry[], void>({
-      query: () => "/timesheets/my/week",
+    getMyWeekTimesheets: builder.query<
+      TimesheetEntry[],
+      { date?: string } | void
+    >({
+      query: (args) => {
+        const date =
+          args && typeof args === "object" && "date" in args
+            ? args.date
+            : undefined;
+        return {
+          url: "/timesheets/my/week",
+          params: date ? { date } : undefined,
+        };
+      },
       transformResponse: (res: ApiResponse<TimesheetEntry[]>) => res.data || [],
       providesTags: ["Timesheets"],
     }),

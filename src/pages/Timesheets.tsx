@@ -209,7 +209,7 @@ const Timesheets = () => {
           />
         </div>
         <div>
-          <WeeklySummary todayEntries={weekEntries} />
+          <WeeklySummary weekEntries={weekEntries} />
         </div>
       </div>
 
