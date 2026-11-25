@@ -100,7 +100,7 @@ const Sidebar = ({
       id: "projects",
       path: "/projects",
       label: "Projects",
-      roles: ["admin"],
+      roles: ["admin", "employee"],
       icon: <Briefcase className="w-5 h-5 shrink-0" />,
     },
     {
