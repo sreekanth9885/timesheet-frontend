@@ -53,7 +53,7 @@ export const tasksApi = api.injectEndpoints({
     >({
       query: ({ id, status }) => ({
         url: `/tasks/${id}/status`,
-        method: "PUT",
+        method: "PATCH",
         body: { status },
       }),
       invalidatesTags: ["Tasks"],

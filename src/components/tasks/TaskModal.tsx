@@ -83,7 +83,10 @@ export function TaskModal({ open, task, projects, employees, onClose }: Props) {
   };
 
   const busy = creating || updating;
-
+  const activeProjects = projects.filter((p) => p.status === "active");
+  const activeEmployees = employees.filter(
+    (emp) => emp.status === "active" || emp.id === task?.assigned_to,
+  );
   return (
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -129,7 +132,7 @@ export function TaskModal({ open, task, projects, employees, onClose }: Props) {
                 required
               >
                 <option value="">Select Project</option>
-                {projects.map((p) => (
+                {activeProjects.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name} {p.project_code ? `(${p.project_code})` : ""}
                   </option>
@@ -152,7 +155,7 @@ export function TaskModal({ open, task, projects, employees, onClose }: Props) {
                 className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm"
               >
                 <option value="">Select Assignee (Optional)</option>
-                {employees.map((emp) => (
+                {activeEmployees.map((emp) => (
                   <option key={emp.id} value={emp.id}>
                     {emp.first_name} {emp.last_name ?? ""} ({emp.employee_id})
                   </option>

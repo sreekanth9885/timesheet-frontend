@@ -21,6 +21,7 @@ export interface Project {
   id: number;
   name: string;
   project_code?: string;
+  status?: string;
 }
 
 export interface Employee {
@@ -28,6 +29,7 @@ export interface Employee {
   first_name: string;
   last_name?: string;
   employee_id: string;
+  status?: "active" | "inactive" | "terminated";
 }
 
 export interface TaskFilters {
