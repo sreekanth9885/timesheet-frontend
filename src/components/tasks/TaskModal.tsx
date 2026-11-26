@@ -40,7 +40,16 @@ const fromTask = (task: Task): TaskFormData => ({
   due_date: task.due_date ? task.due_date.split("T")[0] : null,
   description: task.description ?? "",
 });
-
+function isPastDate(ymd: string | null): boolean {
+  if (!ymd) return false;
+  const today = new Date();
+  const todayYmd = [
+    today.getFullYear(),
+    String(today.getMonth() + 1).padStart(2, "0"),
+    String(today.getDate()).padStart(2, "0"),
+  ].join("-");
+  return ymd < todayYmd; // ISO YYYY-MM-DD compares lexically = chronologically
+}
 export function TaskModal({ open, task, projects, employees, onClose }: Props) {
   const isEdit = !!task;
   const [form, setForm] = useState<TaskFormData>(EMPTY_FORM);
@@ -63,6 +72,12 @@ export function TaskModal({ open, task, projects, employees, onClose }: Props) {
     e.preventDefault();
     if (!form.name.trim() || !form.project_id) {
       toast.error("Please fill in task name and project");
+      return;
+    }
+    if (isPastDate(form.due_date)) {
+      toast.error(
+        "Due date cannot be in the past. Pick today or a future date.",
+      );
       return;
     }
     try {
