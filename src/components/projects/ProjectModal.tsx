@@ -44,13 +44,33 @@ const fromProject = (p: Project): ProjectFormData => ({
   end_date: p.end_date ? p.end_date.split("T")[0] : null,
   description: p.description ?? "",
 });
+const PROJECT_CODE_RE = /^[A-Z0-9]+(?:-[A-Z0-9]+)*$/; // no leading/trailing/consecutive hyphens
+const PROJECT_CODE_MAX = 30;
+const BUDGET_MAX = 100000;
+/** Uppercase, hyphens-only, no consecutive hyphens, capped at PROJECT_CODE_MAX. */
+const sanitizeProjectCode = (raw: string) =>
+  raw
+    .toUpperCase()
+    .replace(/\s+/g, "-") // spaces → hyphens
+    .replace(/[^A-Z0-9-]/g, "") // strip everything else (the "@#$$%" case)
+    .replace(/-{2,}/g, "-") // collapse "--" → "-"
+    .slice(0, PROJECT_CODE_MAX);
+
+const validateProjectCode = (code: string): string => {
+  if (!code.trim()) return "Project code is required";
+  if (code.length > PROJECT_CODE_MAX)
+    return `Project code must be ${PROJECT_CODE_MAX} characters or fewer`;
+  if (!PROJECT_CODE_RE.test(code))
+    return "Use uppercase letters, digits, and hyphens only (e.g., PRJ-001). No leading/trailing/consecutive hyphens.";
+  return "";
+};
 
 export function ProjectModal({ open, project, onClose }: Props) {
   const isEdit = !!project;
   const [form, setForm] = useState<ProjectFormData>(emptyForm);
   const [createProject, { isLoading: creating }] = useCreateProjectMutation();
   const [updateProject, { isLoading: updating }] = useUpdateProjectMutation();
-
+  const [codeError, setCodeError] = useState("");
   useEffect(() => {
     if (!open) return;
     setForm(project ? fromProject(project) : emptyForm());
@@ -65,6 +85,14 @@ export function ProjectModal({ open, project, onClose }: Props) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isEdit) {
+      const codeErr = validateProjectCode(form.project_code ?? "");
+      if (codeErr) {
+        setCodeError(codeErr);
+        toast.error(codeErr);
+        return;
+      }
+    }
     if (!form.name.trim()) {
       toast.error("Please enter project name");
       return;
@@ -118,11 +146,38 @@ export function ProjectModal({ open, project, onClose }: Props) {
               <input
                 type="text"
                 value={form.project_code ?? ""}
-                onChange={(e) => set("project_code", e.target.value)}
+                onChange={(e) => {
+                  if (isEdit) return;
+                  const cleaned = sanitizeProjectCode(e.target.value);
+                  set("project_code", cleaned);
+                  setCodeError(validateProjectCode(cleaned));
+                }}
+                onBlur={() => {
+                  if (!isEdit)
+                    setCodeError(validateProjectCode(form.project_code ?? ""));
+                }}
                 disabled={isEdit}
-                className="w-full border border-gray-200 rounded-md px-3 py-2 text-sm disabled:bg-gray-50 disabled:text-gray-500"
+                maxLength={PROJECT_CODE_MAX}
+                pattern="[A-Z0-9]+(-[A-Z0-9]+)*"
+                title="Uppercase letters, digits, and hyphens only (e.g., PRJ-001)"
+                autoComplete="off"
+                className={`w-full border rounded-md px-3 py-2 text-sm disabled:bg-gray-50 disabled:text-gray-500 ${
+                  codeError
+                    ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                    : "border-gray-200"
+                }`}
                 required={!isEdit}
               />
+              {codeError ? (
+                <p className="text-xs text-red-600 mt-1">{codeError}</p>
+              ) : (
+                !isEdit && (
+                  <p className="text-xs text-gray-500 mt-1">
+                    Uppercase letters, digits, and hyphens. E.g.,{" "}
+                    <span className="font-mono">PRJ-001</span>.
+                  </p>
+                )
+              )}
             </div>
 
             <div>
