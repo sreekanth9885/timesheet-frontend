@@ -190,6 +190,10 @@ function DailyHoursForm({
     if (breakMinutesInput === "" || !Number.isInteger(breakMinutes)) {
       return toast.error("Please enter valid break minutes");
     }
+    if (form.date > getTodayISO()) {
+      // ⬅️ ADD THIS
+      return toast.error("You can't log time for a future date");
+    }
     if (
       !form.project_id ||
       !form.start_time ||
@@ -230,6 +234,7 @@ function DailyHoursForm({
         <input
           type="date"
           value={form.date}
+          max={getTodayISO()}
           onChange={(e) => update("date", e.target.value)}
           disabled={isEdit}
           className={inputClass}
@@ -403,16 +408,31 @@ function WeeklyHoursForm({ onClose }: { onClose: () => void }) {
 
   const submit = async () => {
     if (!projectId) return toast.error("Please select a project");
-
+    if (weekDate > getTodayISO()) {
+      return toast.error("You can't log hours for a future week");
+    }
     const days = weekDays.filter((d) => {
       if (d.isFuture) return false;
       if (existingByDate[d.iso]) return false; // already has entries that day
       const h = Number(hoursMap[d.iso] || 0);
       return h > 0;
     });
-
-    if (!days.length)
-      return toast.error("Enter hours for at least one open day");
+    const futureDaysWithHours = weekDays.filter(
+      (d) => d.isFuture && Number(hoursMap[d.iso] || 0) > 0,
+    );
+    if (futureDaysWithHours.length > 0) {
+      const labels = futureDaysWithHours.map((d) => d.label).join(", ");
+      return toast.error(
+        `You can't log hours for future days (${labels}). Clear them to continue.`,
+      );
+    }
+    if (!days.length) {
+      return toast.error(
+        weekDays.every((d) => d.isFuture)
+          ? "This entire week is in the future — nothing to log"
+          : "Enter hours for at least one open day",
+      );
+    }
 
     for (const d of days) {
       const h = Number(hoursMap[d.iso]);
@@ -468,6 +488,7 @@ function WeeklyHoursForm({ onClose }: { onClose: () => void }) {
         <input
           type="date"
           value={weekDate}
+          max={getTodayISO()}
           onChange={(e) => {
             setWeekDate(e.target.value);
             setHoursMap({});
